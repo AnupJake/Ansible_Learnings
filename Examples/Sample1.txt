@@ -1,0 +1,36 @@
+---
+
+#playbook to create webpage with ntp, http, git etc and deploy the completed web server
+
+- name: Starting of ansible process to install ntp, http,git and configure a web server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install ntp packages
+      apt:
+          name: ntp
+          state: latest
+    - name: Enable ntp service
+      service:
+          name: ntp
+          state: started
+          enabled: yes
+    - name: Install apache http services
+      apt:
+          name: apache2
+          state: latest
+    - name: Enable http service
+      service:
+          name: apache2
+          state: started
+          enabled: yes
+    - name: Install GIT
+      apt:
+          name: git
+          state: latest
+    - name: Clone a github repository to temp folder.
+      git:
+          repo: https://github.com/AnupJake/Ansible_Learnings
+          dest: /var/tmp/
+          clone: yes
+          update: yes
