@@ -1,0 +1,28 @@
+---
+# Ansible playbooks to understand installation of packages and running a cronjob
+
+- name: Install Packages
+  hosts: localhost
+  vars_prompt:
+    - name: user_input
+      prompt: "Please enter some value for user input:"
+  tasks:
+    - name: Install necessary packages
+      become: no
+      register: output
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+    - name: Add a cron job
+      cron:
+        name: "My Sample Job"
+        minute: "55"
+        hour: "17"
+        job: "./cron_test.sh"
+    - name: "Debugging to check for error"
+      debug: var=output.stdout_lines
+    - name: "Display the user Input"
+      debug:
+          var: user_input

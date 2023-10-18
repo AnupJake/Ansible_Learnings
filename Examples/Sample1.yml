@@ -1,0 +1,25 @@
+---
+
+#playbook to Play around ansible and git
+
+- name: Starting of ansible process to install ntp, http,git and configure a web server
+  connection: local
+  hosts: localhost
+  tasks:
+    - name: "Executing shell script tests"
+      register: "output"
+      shell: "pwd"
+    - name: "Creating folder for clone test git"
+      register: "folder"
+      shell: "mkdir -p Ansible_clone "
+    - name: "Changing the directory to folder with git rep"
+      register: "change_directory"
+      shell: "cd Ansible_clone "
+    - name: "Clone the Git repository"
+      git:
+        repo: https://github.com/AnupJake/Ansible_Learnings.git
+        dest: ./Ansible_clone/
+        update: yes
+        version: main
+    - name: "Debugging to check for error"
+      debug: var=output.stdout_lines
